@@ -4,8 +4,8 @@ import SearchBar from '../components/react/SearchBar';
 import AnimeList from '../components/common/AnimeList.astro';
 import { getCurrentSeasonAnime, getTopAnime } from '../api/animeApi';
 
-const currentSeasonResponse = await getCurrentSeasonAnime(1);
-const currentSeasonAnime = currentSeasonResponse.data.slice(0, 10);
+const currentSeasonResponse = await getCurrentSeasonAnime(1,10);
+const currentSeasonAnime = currentSeasonResponse.data;
 
 const topAnimeResponse = await getTopAnime(1, 10);
 const topAnime = topAnimeResponse.data;
@@ -37,7 +37,7 @@ const topAnime = topAnimeResponse.data;
         <div class="w-20 h-1 bg-linear-to-r from-blue-500 to-purple-500 rounded-full"></div>
       </div>
       <a 
-        href="/anime/top" 
+        href="/anime/season" 
         class="text-blue-400 hover:text-blue-300 font-medium flex items-center gap-2"
       >
         Lihat Semua
