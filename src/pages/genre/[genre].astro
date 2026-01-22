@@ -3,7 +3,7 @@ export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import AnimeList from '../../components/common/AnimeList.astro';
 import Pagination from '../../components/react/Pagination';
-import { getAnimeByGenre } from '../../api/anime';
+import { getAnimeByGenre } from '../../api/animeApi';
 
 const { genre } = Astro.params;
 

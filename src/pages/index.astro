@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import SearchBar from '../components/react/SearchBar';
 import AnimeList from '../components/common/AnimeList.astro';
-import { getCurrentSeasonAnime, getTopAnime } from '../api/anime';
+import { getCurrentSeasonAnime, getTopAnime } from '../api/animeApi';
 
 const currentSeasonResponse = await getCurrentSeasonAnime(1);
 const currentSeasonAnime = currentSeasonResponse.data.slice(0, 10);
