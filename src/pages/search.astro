@@ -1,0 +1,114 @@
+---
+export const prerender = false;
+import Layout from '../layouts/Layout.astro';
+import SearchBar from '../components/react/SearchBar';
+import FilterBar from '../components/react/FilterBar';
+import AnimeList from '../components/common/AnimeList.astro';
+import Pagination from '../components/react/Pagination';
+import { searchAnime } from '../api/anime';
+
+const query = Astro.url.searchParams.get('q') || '';
+const page = parseInt(Astro.url.searchParams.get('page') || '1');
+
+let searchResults = null;
+let errorMessage = '';
+
+if (query) {
+  try {
+    searchResults = await searchAnime(query, page, 20);
+    
+
+  } catch (error) {
+    console.error('Search error:', error);
+    errorMessage = 'Terjadi kesalahan saat mencari anime. Silakan coba lagi.';
+  }
+}
+---
+
+<Layout 
+  title={query ? `Search: ${query} - AnimeYuk` : 'Search Anime - AnimeYuk'}
+  description={query ? `Search results for "${query}"` : 'Search for your favorite anime'}
+>
+  <div class="mb-8">
+    <h1 class="text-4xl font-bold mb-4 text-center">
+      <span class="bg-linear-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+        Search Anime
+      </span>
+    </h1>
+    
+    <SearchBar 
+      client:load 
+      initialQuery={query}
+      placeholder="Masukkan judul anime..."
+      autoFocus={!query}
+    />
+  </div>
+
+  {query && (
+    <div class="mb-8">
+      <FilterBar client:load />
+    </div>
+  )}
+
+  {query && searchResults && !errorMessage && (
+    <div>
+      <div class="mb-6">
+        <p class="text-gray-400">
+          Ditemukan <span class="text-white font-bold">{searchResults.pagination?.items?.total || 0}</span> hasil untuk 
+          <span class="text-blue-400 font-bold">"{query}"</span>
+        </p>
+      </div>
+
+      {searchResults.data.length > 0 ? (
+        <>
+          <AnimeList animes={searchResults.data} />
+          
+          {searchResults.pagination && (
+            <Pagination
+              client:only="react"
+              currentPage={searchResults.pagination.current_page}
+              lastPage={searchResults.pagination.last_visible_page}
+              hasNextPage={searchResults.pagination.has_next_page}
+              baseUrl={Astro.url.pathname}
+            />
+          )}
+        </>
+      ) : (
+        <div class="text-center py-16">
+          <div class="text-6xl mb-4">😢</div>
+          <h2 class="text-2xl font-bold mb-2">Tidak ada hasil ditemukan</h2>
+          <p class="text-gray-400">Coba gunakan kata kunci yang berbeda atau lebih umum.</p>
+        </div>
+      )}
+    </div>
+  )}
+
+  {errorMessage && (
+    <div class="bg-red-900/20 border border-red-500 rounded-lg p-6 text-center">
+      <p class="text-red-400">{errorMessage}</p>
+    </div>
+  )}
+
+  {!query && (
+    <div class="text-center py-16">
+      <div class="text-6xl mb-4">🔍</div>
+      <h2 class="text-2xl font-bold mb-2">Mulai Pencarian</h2>
+      <p class="text-gray-400 mb-8">Masukkan kata kunci untuk mencari anime favorit kamu!</p>
+      
+      <!-- Popular Searches -->
+      <div class="max-w-2xl mx-auto">
+        <p class="text-sm text-gray-500 mb-4">Pencarian Populer:</p>
+        <div class="flex flex-wrap gap-3 justify-center">
+          {['Naruto', 'One Piece', 'Attack on Titan', 'Demon Slayer', 'My Hero Academia', 'Jujutsu Kaisen'].map((term) => (
+            <a 
+              href={`/search?q=${encodeURIComponent(term)}`}
+              class="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-full text-sm transition-colors"
+            >
+              {term}
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  )}
+</Layout>
