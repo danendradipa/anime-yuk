@@ -1,0 +1,167 @@
+---
+export const prerender = false;
+import Layout from '../../layouts/Layout.astro';
+import AnimeList from '../../components/common/AnimeList.astro';
+import Pagination from '../../components/react/Pagination';
+import { getAnimeByGenre } from '../../api/anime';
+
+const { genre } = Astro.params;
+
+if (!genre) {
+  return Astro.redirect('/404');
+}
+
+const genreId = parseInt(genre);
+const page = parseInt(Astro.url.searchParams.get('page') || '1');
+
+const genreNames: Record<number, string> = {
+  1: 'Action',
+  2: 'Adventure',
+  4: 'Comedy',
+  8: 'Drama',
+  10: 'Fantasy',
+  14: 'Horror',
+  7: 'Mystery',
+  22: 'Romance',
+  24: 'Sci-Fi',
+  36: 'Slice of Life',
+  30: 'Sports',
+  37: 'Supernatural',
+  41: 'Suspense',
+  9: 'Ecchi',
+  49: 'Erotica',
+  12: 'Hentai',
+  18: 'Mecha',
+  38: 'Military',
+  19: 'Music',
+  6: 'Mythology',
+  40: 'Psychological',
+  21: 'Samurai',
+  23: 'School',
+  31: 'Super Power',
+  32: 'Vampire',
+};
+
+const genreName = genreNames[genreId] || `Genre ${genreId}`;
+
+let animeResponse;
+let errorMessage = '';
+
+try {
+  animeResponse = await getAnimeByGenre(genreId, page);
+} catch (error) {
+  console.error('Error fetching anime by genre:', error);
+  errorMessage = 'Gagal memuat anime untuk genre ini.';
+}
+---
+
+<Layout 
+  title={`${genreName} Anime - AnimeYuk`}
+  description={`Discover the best ${genreName} anime series and movies`}
+>
+  <div class="mb-8">
+    <div class="flex items-center gap-3 mb-4">
+      <a 
+        href="/search"
+        class="text-gray-400 hover:text-white transition-colors"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </a>
+      <h1 class="text-4xl md:text-5xl font-bold">
+        <span class="bg-linear-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          {genreName}
+        </span>
+      </h1>
+    </div>
+    <p class="text-gray-400 text-lg">
+      Jelajahi anime dengan genre {genreName}
+    </p>
+  </div>
+
+  <div class="mb-8">
+    <h2 class="text-sm font-semibold text-gray-500 mb-3">QUICK BROWSE</h2>
+    <div class="flex flex-wrap gap-2">
+      {Object.entries(genreNames).slice(0, 12).map(([id, name]) => (
+        <a 
+          href={`/genre/${id}`}
+          class:list={[
+            'px-4 py-2 rounded-lg transition-colors text-sm font-medium',
+            parseInt(id) === genreId 
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-800 hover:bg-gray-700 text-gray-300'
+          ]}
+        >
+          {name}
+        </a>
+      ))}
+    </div>
+  </div>
+
+  {errorMessage ? (
+    <div class="bg-red-900/20 border border-red-500 rounded-lg p-6 text-center">
+      <p class="text-red-400">{errorMessage}</p>
+    </div>
+  ) : animeResponse && (
+    <>
+      {animeResponse.pagination && (
+        <div class="mb-6">
+          <p class="text-gray-400">
+            Menampilkan <span class="text-white font-bold">{animeResponse.data.length}</span> anime
+            {animeResponse.pagination.items?.total && (
+              <> dari <span class="text-white font-bold">{animeResponse.pagination.items.total.toLocaleString()}</span> total</>
+            )}
+          </p>
+        </div>
+      )}
+
+      {animeResponse.data.length > 0 ? (
+        <>
+          <AnimeList animes={animeResponse.data} />
+          
+          {animeResponse.pagination && (
+            <Pagination
+              client:only="react"
+              currentPage={animeResponse.pagination.current_page}
+              lastPage={animeResponse.pagination.last_visible_page}
+              hasNextPage={animeResponse.pagination.has_next_page}
+              baseUrl={`/genre/${genre}`}
+            />
+          )}
+        </>
+      ) : (
+        <div class="text-center py-16">
+          <div class="text-6xl mb-4">📺</div>
+          <h2 class="text-2xl font-bold mb-2">Tidak ada anime ditemukan</h2>
+          <p class="text-gray-400 mb-8">Tidak ada anime untuk genre ini saat ini.</p>
+          <a 
+            href="/search"
+            class="inline-block bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold transition-colors"
+          >
+            Jelajahi Anime Lainnya
+          </a>
+        </div>
+      )}
+    </>
+  )}
+
+  <section class="mt-16 pt-8 border-t border-gray-800">
+    <h2 class="text-2xl font-bold mb-6">All Genres</h2>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+      {Object.entries(genreNames).map(([id, name]) => (
+        <a 
+          href={`/genre/${id}`}
+          class:list={[
+            'p-4 rounded-lg transition-all text-center font-medium',
+            parseInt(id) === genreId
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-900 hover:bg-gray-800 border border-gray-800 hover:border-gray-700 text-gray-300'
+          ]}
+        >
+          {name}
+        </a>
+      ))}
+    </div>
+  </section>
+</Layout>
