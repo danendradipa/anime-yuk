@@ -1,0 +1,33 @@
+---
+import type { Anime } from '../../types/anime';
+import AnimeCard from './AnimeCard.astro';
+
+interface Props {
+  animes: Anime[];
+  title?: string;
+  loading?: 'lazy' | 'eager';
+}
+
+const { animes, title, loading = 'lazy' } = Astro.props;
+---
+
+{title && (
+  <div class="mb-8">
+    <h2 class="text-3xl font-bold mb-2 bg-linear-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+      {title}
+    </h2>
+    <div class="w-20 h-1 bg-linear-to-r from-blue-500 to-purple-500 rounded-full"></div>
+  </div>
+)}
+
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+  {animes.map((anime, index) => (
+    <AnimeCard anime={anime} loading={index < 5 ? 'eager' : loading} />
+  ))}
+</div>
+
+{animes.length === 0 && (
+  <div class="text-center py-16">
+    <p class="text-gray-400 text-lg">Tidak ada anime yang ditemukan.</p>
+  </div>
+)}
