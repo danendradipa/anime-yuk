@@ -1,0 +1,68 @@
+---
+import type { Anime } from '../../types/anime';
+
+interface Props {
+  anime: Anime;
+  loading?: 'lazy' | 'eager';
+}
+
+const { anime, loading = 'lazy' } = Astro.props;
+
+const imageUrl = anime.images.webp.large_image_url || anime.images.jpg.large_image_url;
+const title = anime.title_english || anime.title;
+---
+
+<article class="group bg-gray-900 rounded-lg overflow-hidden border border-gray-800 hover:border-blue-500 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 hover:-translate-y-1">
+  <a href={`/anime/${anime.mal_id}`} class="block">
+    <div class="relative aspect-3/4 overflow-hidden bg-gray-800">
+      <img
+        src={imageUrl}
+        alt={title}
+        loading={loading}
+        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+      />
+      
+      {anime.score && (
+        <div class="absolute top-2 right-2 bg-blue-600 text-white px-2 py-1 rounded-md text-sm font-bold flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+          </svg>
+          {anime.score.toFixed(1)}
+        </div>
+      )}
+
+      {anime.airing && (
+        <div class="absolute top-2 left-2 bg-green-600 text-white px-2 py-1 rounded-md text-xs font-semibold">
+          AIRING
+        </div>
+      )}
+    </div>
+
+    <div class="p-4">
+      <h3 class="font-bold text-lg mb-2 line-clamp-2 group-hover:text-blue-400 transition-colors">
+        {title}
+      </h3>
+      
+      <div class="flex items-center gap-2 text-sm text-gray-400 mb-2">
+        {anime.type && <span class="bg-gray-800 px-2 py-0.5 rounded">{anime.type}</span>}
+        {anime.episodes && <span>• {anime.episodes} eps</span>}
+      </div>
+
+      {anime.synopsis && (
+        <p class="text-sm text-gray-400 line-clamp-3">
+          {anime.synopsis}
+        </p>
+      )}
+
+      {anime.genres && anime.genres.length > 0 && (
+        <div class="flex flex-wrap gap-1 mt-3">
+          {anime.genres.slice(0, 3).map((genre) => (
+            <span class="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded">
+              {genre.name}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  </a>
+</article>
