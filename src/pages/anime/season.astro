@@ -1,0 +1,55 @@
+---
+export const prerender = false;
+import Layout from '../../layouts/Layout.astro';
+import AnimeList from '../../components/common/AnimeList.astro';
+import Pagination from '../../components/react/Pagination';
+import { getCurrentSeasonAnime } from '../../api/animeApi';
+
+const page = parseInt(Astro.url.searchParams.get('page') || '1');
+
+let seasonAnimeResponse;
+let errorMessage = '';
+
+try {
+  seasonAnimeResponse = await getCurrentSeasonAnime(page, 25);
+} catch (error) {
+  console.error('Error fetching season anime:', error);
+  errorMessage = 'Gagal memuat data anime. Silakan coba lagi.';
+}
+---
+
+<Layout 
+  title="Current Season Anime - AnimeYuk"
+  description="Discover what's airing this season"
+>
+  <div class="mb-8">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">
+      <span class="bg-linear-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+        📺 Current Season
+      </span>
+    </h1>
+    <p class="text-gray-400 text-lg">
+      Anime yang sedang tayang musim ini
+    </p>
+  </div>
+
+  {errorMessage ? (
+    <div class="bg-red-900/20 border border-red-500 rounded-lg p-6 text-center">
+      <p class="text-red-400">{errorMessage}</p>
+    </div>
+  ) : seasonAnimeResponse && (
+    <>
+      <AnimeList animes={seasonAnimeResponse.data} />
+      
+      {seasonAnimeResponse.pagination && (
+        <Pagination
+          client:only="react"
+          currentPage={seasonAnimeResponse.pagination.current_page}
+          lastPage={seasonAnimeResponse.pagination.last_visible_page}
+          hasNextPage={seasonAnimeResponse.pagination.has_next_page}
+          baseUrl="/anime/season"
+        />
+      )}
+    </>
+  )}
+</Layout>
