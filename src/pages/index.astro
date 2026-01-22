@@ -1,11 +1,98 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import SearchBar from '../components/react/SearchBar';
+import AnimeList from '../components/common/AnimeList.astro';
+import { getCurrentSeasonAnime, getTopAnime } from '../api/anime';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const currentSeasonResponse = await getCurrentSeasonAnime(1);
+const currentSeasonAnime = currentSeasonResponse.data.slice(0, 10);
+
+const topAnimeResponse = await getTopAnime(1, 10);
+const topAnime = topAnimeResponse.data;
 ---
 
-<Layout>
-	<Welcome />
+<Layout 
+  title="AnimeYuk - Discover Your Next Favorite Anime"
+  description="Explore current season anime, top-rated series, and discover your next favorite anime with AnimeYuk."
+>
+  <section class="py-16 text-center">
+    <h1 class="text-5xl md:text-6xl font-bold mb-6">
+      <span class="bg-linear-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+        Discover Anime
+      </span>
+    </h1>
+    <p class="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+      Jelajahi ribuan anime, temukan favorit baru, dan bergabung dengan komunitas pecinta anime!
+    </p>
+    
+    <SearchBar client:load placeholder="Cari anime favorit kamu..." />
+  </section>
+
+  <section class="mb-16">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h2 class="text-3xl font-bold mb-2 bg-linear-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          Current Season
+        </h2>
+        <div class="w-20 h-1 bg-linear-to-r from-blue-500 to-purple-500 rounded-full"></div>
+      </div>
+      <a 
+        href="/anime/top" 
+        class="text-blue-400 hover:text-blue-300 font-medium flex items-center gap-2"
+      >
+        Lihat Semua
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </a>
+    </div>
+    <AnimeList animes={currentSeasonAnime} loading="eager" />
+  </section>
+
+  <section class="mb-16">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h2 class="text-3xl font-bold mb-2 bg-linear-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+          Top Anime
+        </h2>
+        <div class="w-20 h-1 bg-linear-to-r from-purple-500 to-pink-500 rounded-full"></div>
+      </div>
+      <a 
+        href="/anime/top" 
+        class="text-purple-400 hover:text-purple-300 font-medium flex items-center gap-2"
+      >
+        Lihat Semua
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </a>
+    </div>
+    <AnimeList animes={topAnime} />
+  </section>
+
+  <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+    <a 
+      href="/anime/top" 
+      class="bg-linear-to-br from-blue-600 to-blue-800 p-6 rounded-lg hover:scale-105 transition-transform"
+    >
+      <h3 class="text-2xl font-bold mb-2">🏆 Top Anime</h3>
+      <p class="text-gray-200">Anime dengan rating tertinggi</p>
+    </a>
+    
+    <a 
+      href="/search" 
+      class="bg-linear-to-br from-purple-600 to-purple-800 p-6 rounded-lg hover:scale-105 transition-transform"
+    >
+      <h3 class="text-2xl font-bold mb-2">🔍 Advanced Search</h3>
+      <p class="text-gray-200">Cari dengan filter lengkap</p>
+    </a>
+    
+    <a 
+      href="/genre/1" 
+      class="bg-linear-to-br from-pink-600 to-pink-800 p-6 rounded-lg hover:scale-105 transition-transform"
+    >
+      <h3 class="text-2xl font-bold mb-2">🎭 Browse Genres</h3>
+      <p class="text-gray-200">Jelajahi berdasarkan genre</p>
+    </a>
+  </section>
 </Layout>
