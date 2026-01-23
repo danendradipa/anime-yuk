@@ -38,7 +38,7 @@ export default function ThemeToggle() {
       className="p-2 rounded-lg bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 transition-colors hover:bg-gray-300 dark:hover:bg-gray-700"
       aria-label="Toggle Dark Mode"
     >
-      {theme === "light" ? <Sun size={20} /> : <Moon size={20} />}
+      {theme === "light" ? <Sun size={16} /> : <Moon size={16} />}
     </button>
   );
 }
