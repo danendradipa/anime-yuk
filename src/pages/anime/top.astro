@@ -22,34 +22,37 @@ try {
   title="Top Anime - AnimeYuk"
   description="Discover the highest-rated and most popular anime series of all time"
 >
-  <div class="mb-8">
-    <h1 class="text-4xl md:text-5xl font-bold mb-4">
-      <span class="text-white">
-        🏆 Top Anime
-      </span>
+  <div class="mx-auto mb-12 max-w-3xl text-center">
+    
+    <h1 class="mb-4 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white md:text-5xl">
+      Top Rated Anime
     </h1>
-    <p class="text-gray-400 text-lg">
-      Anime dengan rating tertinggi sepanjang masa
+    
+    <p class="text-lg text-gray-600 dark:text-gray-400">
+      Daftar anime legendaris dengan rating tertinggi sepanjang masa pilihan komunitas global.
     </p>
   </div>
 
   {errorMessage ? (
-    <div class="bg-red-900/20 border border-red-500 rounded-lg p-6 text-center">
-      <p class="text-red-400">{errorMessage}</p>
+    <div class="mx-auto max-w-lg rounded-xl border border-red-200 bg-red-50 p-6 text-center text-red-600 dark:border-red-900/50 dark:bg-red-900/20 dark:text-red-400">
+      <div class="mb-2 text-3xl">⚠️</div>
+      <p class="font-medium">{errorMessage}</p>
     </div>
   ) : topAnimeResponse && (
     <>
       <AnimeList animes={topAnimeResponse.data} />
       
-      {topAnimeResponse.pagination && (
-        <Pagination
-          client:only="react"
-          currentPage={topAnimeResponse.pagination.current_page}
-          lastPage={topAnimeResponse.pagination.last_visible_page}
-          hasNextPage={topAnimeResponse.pagination.has_next_page}
-          baseUrl="/anime/top"
-        />
-      )}
+      <div class="mt-12 flex justify-center">
+        {topAnimeResponse.pagination && (
+          <Pagination
+            client:only="react"
+            currentPage={topAnimeResponse.pagination.current_page}
+            lastPage={topAnimeResponse.pagination.last_visible_page}
+            hasNextPage={topAnimeResponse.pagination.has_next_page}
+            baseUrl="/anime/top"
+          />
+        )}
+      </div>
     </>
   )}
 </Layout>
