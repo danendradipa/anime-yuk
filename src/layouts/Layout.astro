@@ -26,8 +26,32 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
 		<ClientRouter />
+    <script is:inline>
+    const getTheme = () => {
+      if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+        return localStorage.getItem('theme');
+      }
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+      }
+      return 'light';
+    };
+
+    const setTheme = () => {
+      const theme = getTheme();
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    };
+
+    setTheme();
+
+    document.addEventListener('astro:after-swap', setTheme);
+  </script>
   </head>
-  <body class="bg-gray-950 text-gray-100 min-h-screen">
+  <body class=" min-h-screen">
     <Header />
     <main class="container mx-auto px-4 py-8">
       <slot />
