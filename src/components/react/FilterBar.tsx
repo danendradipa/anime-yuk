@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Filter, X } from 'lucide-react';
+import { Filter, X, ChevronDown } from 'lucide-react';
 
 interface FilterOption {
   label: string;
@@ -93,110 +93,120 @@ export default function FilterBar({ onFilterChange }: FilterBarProps) {
   const activeFilterCount = [filters.type, filters.status, filters.rating].filter(Boolean).length;
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-lg p-4">
-      <div className="flex items-center justify-between mb-4">
+    <div className="rounded-xl border border-gray-200 bg-white shadow-sm transition-all dark:border-gray-800 dark:bg-gray-900">
+      
+      <div className="flex items-center justify-between p-4">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center gap-2 text-gray-300 hover:text-white font-medium"
+          className="flex items-center gap-2 font-medium text-gray-700 transition-colors hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
         >
-          <Filter className="w-5 h-5" />
+          <Filter className="h-5 w-5" />
           <span>Filters</span>
+          
           {activeFilterCount > 0 && (
-            <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white">
               {activeFilterCount}
             </span>
           )}
+          
+          <ChevronDown 
+            className={`h-4 w-4 text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
+          />
         </button>
 
         {activeFilterCount > 0 && (
           <button
             onClick={handleReset}
-            className="flex items-center gap-1 text-sm text-gray-400 hover:text-gray-300"
+            className="flex items-center gap-1 text-sm font-medium text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400"
           >
-            <X className="w-4 h-4" />
+            <X className="h-4 w-4" />
             Reset
           </button>
         )}
       </div>
 
       {isOpen && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 pt-4 border-t border-gray-800">
-          <div>
-            <label className="block text-sm font-medium text-gray-400 mb-2">Type</label>
-            <select
-              value={filters.type}
-              onChange={(e) => handleFilterChange('type', e.target.value)}
-              className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-100 focus:outline-none focus:border-blue-500"
-            >
-              {TYPES.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
+        <div className="grid grid-cols-1 gap-4 border-t border-gray-100 p-4 dark:border-gray-800 sm:grid-cols-2 lg:grid-cols-5">
+          
+          <FilterGroup 
+            label="Type" 
+            value={filters.type} 
+            onChange={(val) => handleFilterChange('type', val)} 
+            options={TYPES} 
+          />
+          
+          <FilterGroup 
+            label="Status" 
+            value={filters.status} 
+            onChange={(val) => handleFilterChange('status', val)} 
+            options={STATUSES} 
+          />
+          
+          <FilterGroup 
+            label="Rating" 
+            value={filters.rating} 
+            onChange={(val) => handleFilterChange('rating', val)} 
+            options={RATINGS} 
+          />
+          
+          <FilterGroup 
+            label="Order By" 
+            value={filters.orderBy} 
+            onChange={(val) => handleFilterChange('orderBy', val)} 
+            options={ORDER_BY} 
+          />
+          
+          <FilterGroup 
+            label="Sort" 
+            value={filters.sort} 
+            onChange={(val) => handleFilterChange('sort', val)} 
+            options={SORT} 
+          />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-400 mb-2">Status</label>
-            <select
-              value={filters.status}
-              onChange={(e) => handleFilterChange('status', e.target.value)}
-              className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-100 focus:outline-none focus:border-blue-500"
-            >
-              {STATUSES.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-400 mb-2">Rating</label>
-            <select
-              value={filters.rating}
-              onChange={(e) => handleFilterChange('rating', e.target.value)}
-              className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-100 focus:outline-none focus:border-blue-500"
-            >
-              {RATINGS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-400 mb-2">Order By</label>
-            <select
-              value={filters.orderBy}
-              onChange={(e) => handleFilterChange('orderBy', e.target.value)}
-              className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-100 focus:outline-none focus:border-blue-500"
-            >
-              {ORDER_BY.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-400 mb-2">Sort</label>
-            <select
-              value={filters.sort}
-              onChange={(e) => handleFilterChange('sort', e.target.value)}
-              className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-100 focus:outline-none focus:border-blue-500"
-            >
-              {SORT.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function FilterGroup({ label, value, onChange, options }: { 
+  label: string, 
+  value: string, 
+  onChange: (val: string) => void, 
+  options: FilterOption[] 
+}) {
+  return (
+    <div>
+      <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+        {label}
+      </label>
+      <div className="relative">
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="
+            w-full appearance-none rounded-lg border px-3 py-2 text-sm font-medium outline-none transition-all
+            
+            /* Light Mode */
+            bg-gray-50 border-gray-200 text-gray-900
+            hover:border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100
+            
+            /* Dark Mode */
+            dark:bg-gray-800 dark:border-gray-700 dark:text-white
+            dark:hover:border-gray-600 dark:focus:border-blue-500 dark:focus:ring-blue-900/30
+          "
+        >
+          {options.map((option) => (
+            <option key={option.value} value={option.value} className="bg-white text-gray-900 dark:bg-gray-800 dark:text-white">
+              {option.label}
+            </option>
+          ))}
+        </select>
+        
+        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+          <ChevronDown className="h-4 w-4" />
+        </div>
+      </div>
     </div>
   );
 }
