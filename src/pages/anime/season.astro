@@ -22,34 +22,37 @@ try {
   title="Current Season Anime - AnimeYuk"
   description="Discover what's airing this season"
 >
-  <div class="mb-8">
-    <h1 class="text-4xl md:text-5xl font-bold mb-4">
-      <span class="text-white">
-        📺 Current Season
-      </span>
+  <div class="mx-auto mb-12 max-w-3xl text-center">
+
+    <h1 class="mb-4 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white md:text-5xl">
+      Current Season
     </h1>
-    <p class="text-gray-400 text-lg">
-      Anime yang sedang tayang musim ini
+    
+    <p class="text-lg text-gray-600 dark:text-gray-400">
+      Jangan lewatkan episode terbaru dari anime yang sedang tayang musim ini.
     </p>
   </div>
 
   {errorMessage ? (
-    <div class="bg-red-900/20 border border-red-500 rounded-lg p-6 text-center">
-      <p class="text-red-400">{errorMessage}</p>
+    <div class="mx-auto max-w-lg rounded-xl border border-red-200 bg-red-50 p-6 text-center text-red-600 dark:border-red-900/50 dark:bg-red-900/20 dark:text-red-400">
+      <div class="mb-2 text-3xl">⚠️</div>
+      <p class="font-medium">{errorMessage}</p>
     </div>
   ) : seasonAnimeResponse && (
     <>
       <AnimeList animes={seasonAnimeResponse.data} />
       
-      {seasonAnimeResponse.pagination && (
-        <Pagination
-          client:only="react"
-          currentPage={seasonAnimeResponse.pagination.current_page}
-          lastPage={seasonAnimeResponse.pagination.last_visible_page}
-          hasNextPage={seasonAnimeResponse.pagination.has_next_page}
-          baseUrl="/anime/season"
-        />
-      )}
+      <div class="mt-12 flex justify-center">
+        {seasonAnimeResponse.pagination && (
+          <Pagination
+            client:only="react"
+            currentPage={seasonAnimeResponse.pagination.current_page}
+            lastPage={seasonAnimeResponse.pagination.last_visible_page}
+            hasNextPage={seasonAnimeResponse.pagination.has_next_page}
+            baseUrl="/anime/season"
+          />
+        )}
+      </div>
     </>
   )}
 </Layout>
