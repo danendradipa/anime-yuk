@@ -41,280 +41,203 @@ const imageUrl = anime?.images.webp.large_image_url || anime?.images.jpg.large_i
   description={anime?.synopsis || `Details for ${title}`}
 >
   {errorMessage ? (
-    <div class="bg-red-900/20 border border-red-500 rounded-lg p-6 text-center">
-      <p class="text-red-400">{errorMessage}</p>
+    <div class="mx-auto max-w-lg rounded-xl border border-red-200 bg-red-50 p-6 text-center text-red-600 dark:border-red-900/50 dark:bg-red-900/20 dark:text-red-400">
+      <p class="font-medium">{errorMessage}</p>
     </div>
   ) : anime && (
-    <div>
-      <div class="relative -mx-4 -mt-8 mb-8">
-        <!-- Background Image with Overlay -->
-        <div class="absolute inset-0 overflow-hidden">
+    <article>
+      
+      <div class="relative -mx-4 -mt-8 mb-10 overflow-hidden md:-mx-8 md:-mt-10">
+        <div class="absolute inset-0 z-0">
           <img 
             src={imageUrl} 
-            alt={title}
-            class="w-full h-full object-cover opacity-20 blur-2xl scale-110"
+            alt="Background"
+            class="h-full w-full object-cover opacity-30 blur-xl md:opacity-20"
           />
-          <div class="absolute inset-0 bg-linear-to-b from-gray-950/50 via-gray-950/80 to-gray-950"></div>
+          <div class="absolute inset-0 bg-linear-to-t from-gray-50 via-gray-50/80 to-gray-50/30 dark:from-gray-950 dark:via-gray-950/80 dark:to-gray-950/30"></div>
         </div>
 
-        <div class="relative container mx-auto px-4 pt-12 pb-8">
-          <div class="flex flex-col md:flex-row gap-8">
-            <div class="shrink-0">
+        <div class="relative z-10 container mx-auto px-4 pt-10 md:pt-16">
+          <div class="flex flex-col gap-8 md:flex-row">
+            
+            <div class="shrink-0 text-center md:text-left">
               <img 
                 src={imageUrl}
                 alt={title}
-                class="w-full md:w-80 rounded-lg shadow-2xl border-2 border-gray-800"
+                class="mx-auto h-auto w-64 rounded-xl border border-gray-200 shadow-xl dark:border-gray-800 md:w-72"
               />
-            </div>
-
-            <div class="flex-1">
-              <h1 class="text-4xl md:text-5xl font-bold mb-3 text-white">
-                {title}
-              </h1>
               
-              {anime.title_japanese && (
-                <p class="text-xl text-gray-400 mb-4">{anime.title_japanese}</p>
-              )}
-
-              <div class="flex flex-wrap gap-3 mb-6">
-                {anime.score && (
-                  <div class="bg-blue-600 px-4 py-2 rounded-lg flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                    </svg>
-                    <span class="font-bold text-lg">{anime.score.toFixed(2)}</span>
-                  </div>
-                )}
-                
-                {anime.rank && (
-                  <div class="bg-yellow-600 px-4 py-2 rounded-lg">
-                    <span class="font-bold">#{anime.rank} Ranked</span>
-                  </div>
-                )}
-                
-                {anime.popularity && (
-                  <div class="bg-purple-600 px-4 py-2 rounded-lg">
-                    <span class="font-bold">#{anime.popularity} Popularity</span>
-                  </div>
-                )}
-              </div>
-
-              <div class="grid grid-cols-2 md:grid-cols-3 gap-4 bg-gray-900/80 backdrop-blur-sm p-6 rounded-lg border border-gray-800">
-                {anime.type && (
-                  <div>
-                    <p class="text-gray-500 text-sm mb-1">Type</p>
-                    <p class="text-white font-semibold">{anime.type}</p>
-                  </div>
-                )}
-                
-                {anime.episodes && (
-                  <div>
-                    <p class="text-gray-500 text-sm mb-1">Episodes</p>
-                    <p class="text-white font-semibold">{anime.episodes}</p>
-                  </div>
-                )}
-                
-                {anime.status && (
-                  <div>
-                    <p class="text-gray-500 text-sm mb-1">Status</p>
-                    <p class="text-white font-semibold">{anime.status}</p>
-                  </div>
-                )}
-                
-                {anime.aired?.string && (
-                  <div>
-                    <p class="text-gray-500 text-sm mb-1">Aired</p>
-                    <p class="text-white font-semibold">{anime.aired.string}</p>
-                  </div>
-                )}
-                
-                {anime.season && anime.year && (
-                  <div>
-                    <p class="text-gray-500 text-sm mb-1">Season</p>
-                    <p class="text-white font-semibold capitalize">{anime.season} {anime.year}</p>
-                  </div>
-                )}
-                
-                {anime.duration && (
-                  <div>
-                    <p class="text-gray-500 text-sm mb-1">Duration</p>
-                    <p class="text-white font-semibold">{anime.duration}</p>
-                  </div>
-                )}
-                
-                {anime.rating && (
-                  <div class="col-span-2">
-                    <p class="text-gray-500 text-sm mb-1">Rating</p>
-                    <p class="text-white font-semibold">{anime.rating}</p>
-                  </div>
-                )}
-              </div>
-
-              {anime.trailer?.embed_url && (
-                <div class="mt-6">
+              <div class="mt-4 flex flex-col gap-3">
+                {anime.trailer?.embed_url && (
                   <a 
                     href={anime.trailer.url || '#'}
                     target="_blank"
-                    class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 px-6 py-3 rounded-lg font-semibold transition-colors"
+                    class="flex w-full items-center justify-center gap-2 rounded-lg bg-red-600 px-4 py-2.5 font-semibold text-white transition-colors hover:bg-red-700"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M8 5v14l11-7z"/>
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
                     Watch Trailer
                   </a>
-                </div>
+                )}
+                <a 
+                  href={anime.url}
+                  target="_blank"
+                  class="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+                >
+                  MyAnimeList
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                </a>
+              </div>
+            </div>
+
+            <div class="flex-1">
+              <div class="mb-4 flex flex-wrap gap-2">
+                {anime.score && (
+                  <div class="flex items-center gap-1 rounded-md bg-blue-100 px-2 py-1 text-sm font-bold text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    {anime.score.toFixed(2)}
+                  </div>
+                )}
+                {anime.rank && (
+                  <div class="rounded-md bg-yellow-100 px-2 py-1 text-sm font-semibold text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400">
+                    Rank #{anime.rank}
+                  </div>
+                )}
+                {anime.status && (
+                  <div class="rounded-md bg-gray-200 px-2 py-1 text-sm font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                    {anime.status}
+                  </div>
+                )}
+              </div>
+
+              <h1 class="mb-2 text-3xl font-extrabold leading-tight text-gray-900 dark:text-white md:text-5xl">
+                {title}
+              </h1>
+              {anime.title_japanese && (
+                <p class="mb-6 text-xl text-gray-500 dark:text-gray-400 font-japanese">
+                  {anime.title_japanese}
+                </p>
               )}
+
+              <div class="mb-8 rounded-xl border border-gray-200 bg-white/50 p-6 backdrop-blur-sm dark:border-gray-800 dark:bg-gray-900/50">
+                <h3 class="mb-2 font-bold text-gray-900 dark:text-white">Synopsis</h3>
+                <p class="whitespace-pre-line text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+                  {anime.synopsis || "No synopsis available."}
+                </p>
+              </div>
+
+              <div class="grid grid-cols-2 gap-x-4 gap-y-6 rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900 sm:grid-cols-3 md:grid-cols-4">
+                <div>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">Type</p>
+                  <p class="font-semibold text-gray-900 dark:text-white">{anime.type || '?'}</p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">Episodes</p>
+                  <p class="font-semibold text-gray-900 dark:text-white">{anime.episodes || '?'}</p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">Duration</p>
+                  <p class="font-semibold text-gray-900 dark:text-white">{anime.duration || '?'}</p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">Season</p>
+                  <p class="font-semibold capitalize text-gray-900 dark:text-white">
+                    {anime.season} {anime.year}
+                  </p>
+                </div>
+                <div class="col-span-2">
+                  <p class="text-xs text-gray-500 dark:text-gray-400">Aired</p>
+                  <p class="font-semibold text-gray-900 dark:text-white">{anime.aired?.string}</p>
+                </div>
+                <div class="col-span-2">
+                  <p class="text-xs text-gray-500 dark:text-gray-400">Rating</p>
+                  <p class="font-semibold text-gray-900 dark:text-white">{anime.rating}</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {anime.genres && anime.genres.length > 0 && (
-        <section class="mb-8">
-          <h2 class="text-2xl font-bold mb-4">Genres</h2>
-          <div class="flex flex-wrap gap-2">
-            {anime.genres.map((genre) => (
+      <div class="space-y-12 pb-16">
+        
+        <section>
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="text-sm font-semibold text-gray-500 dark:text-gray-400">Genres:</span>
+            {anime.genres?.map((genre) => (
               <a 
-                href={`/genre/${genre.mal_id}`}
-                class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors"
+                href={`/genre/${genre.mal_id}`} 
+                class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-sm text-gray-700 transition-colors hover:border-blue-300 hover:text-blue-600 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300 dark:hover:border-blue-500 dark:hover:text-blue-400"
               >
                 {genre.name}
               </a>
             ))}
           </div>
-        </section>
-      )}
-
-      {anime.synopsis && (
-        <section class="mb-8">
-          <h2 class="text-2xl font-bold mb-4">Synopsis</h2>
-          <div class="bg-gray-900 border border-gray-800 rounded-lg p-6">
-            <p class="text-gray-300 leading-relaxed whitespace-pre-line">{anime.synopsis}</p>
-          </div>
-        </section>
-      )}
-
-      {anime.background && (
-        <section class="mb-8">
-          <h2 class="text-2xl font-bold mb-4">Background</h2>
-          <div class="bg-gray-900 border border-gray-800 rounded-lg p-6">
-            <p class="text-gray-300 leading-relaxed whitespace-pre-line">{anime.background}</p>
-          </div>
-        </section>
-      )}
-
-      <div class="grid md:grid-cols-2 gap-6 mb-8">
-        {anime.studios && anime.studios.length > 0 && (
-          <section>
-            <h2 class="text-2xl font-bold mb-4">Studios</h2>
-            <div class="bg-gray-900 border border-gray-800 rounded-lg p-4">
-              <div class="flex flex-wrap gap-2">
-                {anime.studios.map((studio) => (
-                  <span class="bg-gray-800 px-3 py-1.5 rounded-lg text-sm">
-                    {studio.name}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {anime.producers && anime.producers.length > 0 && (
-          <section>
-            <h2 class="text-2xl font-bold mb-4">Producers</h2>
-            <div class="bg-gray-900 border border-gray-800 rounded-lg p-4">
-              <div class="flex flex-wrap gap-2">
-                {anime.producers.map((producer) => (
-                  <span class="bg-gray-800 px-3 py-1.5 rounded-lg text-sm">
-                    {producer.name}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-      </div>
-
-      {characters && characters.length > 0 && (
-        <section class="mb-8">
-          <h2 class="text-2xl font-bold mb-4">Characters</h2>
-          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-            {characters.slice(0, 12).map((char) => (
-              <div class="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden hover:border-blue-500 transition-colors">
-                <img 
-                  src={char.character.images.webp.image_url || char.character.images.jpg.image_url}
-                  alt={char.character.name}
-                  class="w-full aspect-3/4 object-cover"
-                  loading="lazy"
-                />
-                <div class="p-3">
-                  <p class="font-semibold text-sm line-clamp-2 mb-1">{char.character.name}</p>
-                  <p class="text-xs text-gray-400">{char.role}</p>
-                </div>
-              </div>
+          
+          <div class="mt-4 flex flex-wrap items-center gap-3">
+            <span class="text-sm font-semibold text-gray-500 dark:text-gray-400">Studios:</span>
+            {anime.studios?.map((studio) => (
+              <span class="text-sm font-medium text-gray-900 dark:text-white">
+                {studio.name}
+              </span>
             ))}
           </div>
         </section>
-      )}
 
-      {recommendations?.data && recommendations.data.length > 0 && (
-        <section class="mb-8">
-          <h2 class="text-2xl font-bold mb-4">Recommendations</h2>
-          <AnimeList 
-            animes={recommendations.data.slice(0, 10).map((rec: any) => rec.entry)} 
-          />
+        {characters && characters.length > 0 && (
+          <section>
+            <h2 class="mb-6 text-2xl font-bold text-gray-900 dark:text-white">Characters</h2>
+            <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+              {characters.slice(0, 12).map((char) => (
+                <div class="group overflow-hidden rounded-lg border border-gray-200 bg-white transition-all hover:border-blue-400 dark:border-gray-800 dark:bg-gray-900">
+                  <div class="aspect-3/4 overflow-hidden bg-gray-100 dark:bg-gray-800">
+                    <img 
+                      src={char.character.images.webp.image_url || char.character.images.jpg.image_url}
+                      alt={char.character.name}
+                      class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div class="p-3">
+                    <p class="truncate text-sm font-bold text-gray-900 dark:text-white">{char.character.name}</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">{char.role}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <section>
+          <h2 class="mb-6 text-2xl font-bold text-gray-900 dark:text-white">Community Stats</h2>
+          <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+            <div class="rounded-xl border border-gray-200 bg-gray-50 p-4 text-center dark:border-gray-800 dark:bg-gray-900">
+              <p class="text-2xl font-bold text-gray-900 dark:text-white">{anime.scored_by?.toLocaleString() || '-'}</p>
+              <p class="text-xs text-gray-500">Users Scored</p>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-gray-50 p-4 text-center dark:border-gray-800 dark:bg-gray-900">
+              <p class="text-2xl font-bold text-gray-900 dark:text-white">{anime.members?.toLocaleString() || '-'}</p>
+              <p class="text-xs text-gray-500">Members</p>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-gray-50 p-4 text-center dark:border-gray-800 dark:bg-gray-900">
+              <p class="text-2xl font-bold text-gray-900 dark:text-white">{anime.favorites?.toLocaleString() || '-'}</p>
+              <p class="text-xs text-gray-500">Favorites</p>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-gray-50 p-4 text-center dark:border-gray-800 dark:bg-gray-900">
+              <p class="text-2xl font-bold text-gray-900 dark:text-white">#{anime.popularity?.toLocaleString() || '-'}</p>
+              <p class="text-xs text-gray-500">Popularity</p>
+            </div>
+          </div>
         </section>
-      )}
 
-      <section class="mb-8">
-        <h2 class="text-2xl font-bold mb-4">Statistics</h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {anime.scored_by && (
-            <div class="bg-gray-900 border border-gray-800 rounded-lg p-4 text-center">
-              <p class="text-3xl font-bold text-blue-400">{anime.scored_by.toLocaleString()}</p>
-              <p class="text-gray-400 text-sm mt-1">Users Scored</p>
-            </div>
-          )}
-          
-          {anime.members && (
-            <div class="bg-gray-900 border border-gray-800 rounded-lg p-4 text-center">
-              <p class="text-3xl font-bold text-purple-400">{anime.members.toLocaleString()}</p>
-              <p class="text-gray-400 text-sm mt-1">Members</p>
-            </div>
-          )}
-          
-          {anime.favorites && (
-            <div class="bg-gray-900 border border-gray-800 rounded-lg p-4 text-center">
-              <p class="text-3xl font-bold text-pink-400">{anime.favorites.toLocaleString()}</p>
-              <p class="text-gray-400 text-sm mt-1">Favorites</p>
-            </div>
-          )}
-          
-          {anime.rank && (
-            <div class="bg-gray-900 border border-gray-800 rounded-lg p-4 text-center">
-              <p class="text-3xl font-bold text-yellow-400">#{anime.rank}</p>
-              <p class="text-gray-400 text-sm mt-1">Ranked</p>
-            </div>
-          )}
-        </div>
-      </section>
-
-      <section class="mb-8">
-        <div class="bg-gray-900 border border-gray-800 rounded-lg p-6">
-          <a 
-            href={anime.url}
-            target="_blank"
-            class="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-              <polyline points="15 3 21 3 21 9"></polyline>
-              <line x1="10" y1="14" x2="21" y2="3"></line>
-            </svg>
-            View on MyAnimeList
-          </a>
-        </div>
-      </section>
-    </div>
+        {recommendations?.data && recommendations.data.length > 0 && (
+          <section>
+            <h2 class="mb-6 text-2xl font-bold text-gray-900 dark:text-white">You Might Like</h2>
+            <AnimeList 
+              animes={recommendations.data.slice(0, 10).map((rec: any) => rec.entry)} 
+            />
+          </section>
+        )}
+      </div>
+    </article>
   )}
 </Layout>
