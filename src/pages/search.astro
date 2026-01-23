@@ -29,20 +29,18 @@ if (query) {
   title={query ? `Search: ${query} - AnimeYuk` : 'Search Anime - AnimeYuk'}
   description={query ? `Search results for "${query}"` : 'Search for your favorite anime'}
 >
-  <div class="mb-8">
-    <h1 class="text-4xl font-bold mb-4 text-center">
-      <span class="bg-linear-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-        Search Anime
-      </span>
-    </h1>
-    
-    <SearchBar 
-      client:load 
-      initialQuery={query}
-      placeholder="Masukkan judul anime..."
-      autoFocus={!query}
-    />
-  </div>
+<div class="mb-8">
+  <h1 class="text-3xl md:text-4xl font-bold mb-4 text-center text-white">
+    Search Anime
+  </h1>
+  
+  <SearchBar 
+    client:load 
+    initialQuery={query}
+    placeholder="Masukkan judul anime..."
+    autoFocus={!query}
+  />
+</div>
 
   {query && (
     <div class="mb-8">
