@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Search, X } from 'lucide-react';
+import { useState } from "react";
+import { Search, X } from "lucide-react";
 
 interface SearchBarProps {
   initialQuery?: string;
@@ -8,21 +8,21 @@ interface SearchBarProps {
   autoFocus?: boolean;
 }
 
-export default function SearchBar({ 
-  initialQuery = '', 
+export default function SearchBar({
+  initialQuery = "",
   onSearch,
-  placeholder = 'Search anime...',
-  autoFocus = false 
+  placeholder = "Search anime...",
+  autoFocus = false,
 }: SearchBarProps) {
   const [query, setQuery] = useState(initialQuery);
   const [isSearching, setIsSearching] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (query.trim()) {
       setIsSearching(true);
-      
+
       if (onSearch) {
         onSearch(query.trim());
       } else {
@@ -32,9 +32,9 @@ export default function SearchBar({
   };
 
   const handleClear = () => {
-    setQuery('');
+    setQuery("");
     if (onSearch) {
-      onSearch('');
+      onSearch("");
     }
   };
 
@@ -42,18 +42,24 @@ export default function SearchBar({
     <form onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto">
       <div className="relative">
         <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-          <Search className="w-5 h-5 text-gray-400" />
+          <Search className="w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
         </div>
-        
+
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={placeholder}
           autoFocus={autoFocus}
-          className="w-full pl-12 pr-12 py-3 bg-gray-900 border border-gray-700 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+          className="
+            w-full pl-11 pr-12 py-3 rounded-xl border transition-all duration-200 outline-none
+            bg-white text-gray-900 border-gray-200 placeholder-gray-400
+            focus:border-blue-500 focus:ring-4 focus:ring-blue-50
+            dark:bg-gray-900 dark:text-white dark:border-gray-800 dark:placeholder-gray-500
+            dark:focus:border-blue-500 dark:focus:ring-blue-900/30
+          "
         />
-        
+
         {query && (
           <button
             type="button"
@@ -66,7 +72,7 @@ export default function SearchBar({
       </div>
 
       <div className="mt-2 text-sm text-gray-400 text-center">
-        Press Enter to search or{' '}
+        Press Enter to search or{" "}
         <button
           type="submit"
           disabled={!query.trim() || isSearching}
