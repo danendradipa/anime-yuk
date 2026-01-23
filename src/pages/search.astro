@@ -16,8 +16,6 @@ let errorMessage = '';
 if (query) {
   try {
     searchResults = await searchAnime(query, page, 20);
-    
-
   } catch (error) {
     console.error('Search error:', error);
     errorMessage = 'Terjadi kesalahan saat mencari anime. Silakan coba lagi.';
@@ -29,18 +27,20 @@ if (query) {
   title={query ? `Search: ${query} - AnimeYuk` : 'Search Anime - AnimeYuk'}
   description={query ? `Search results for "${query}"` : 'Search for your favorite anime'}
 >
-<div class="mb-8">
-  <h1 class="text-3xl md:text-4xl font-bold mb-4 text-center text-white">
-    Search Anime
-  </h1>
-  
-  <SearchBar 
-    client:load 
-    initialQuery={query}
-    placeholder="Masukkan judul anime..."
-    autoFocus={!query}
-  />
-</div>
+  <div class="mx-auto mb-10 max-w-3xl text-center">
+    <h1 class="mb-6 text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
+      {query ? 'Search Results' : 'Search Anime'}
+    </h1>
+    
+    <div class="relative mx-auto w-full">
+      <SearchBar 
+        client:load 
+        initialQuery={query}
+        placeholder="Masukkan judul anime..."
+        autoFocus={!query}
+      />
+    </div>
+  </div>
 
   {query && (
     <div class="mb-8">
@@ -50,10 +50,10 @@ if (query) {
 
   {query && searchResults && !errorMessage && (
     <div>
-      <div class="mb-6">
-        <p class="text-gray-400">
-          Ditemukan <span class="text-white font-bold">{searchResults.pagination?.items?.total || 0}</span> hasil untuk 
-          <span class="text-blue-400 font-bold">"{query}"</span>
+      <div class="mb-6 flex items-center justify-between border-b border-gray-200 pb-4 dark:border-gray-800">
+        <p class="text-sm text-gray-600 dark:text-gray-400">
+          Ditemukan <span class="font-bold text-gray-900 dark:text-white">{searchResults.pagination?.items?.total || 0}</span> hasil untuk 
+          <span class="font-bold text-blue-600 dark:text-blue-400"> "{query}"</span>
         </p>
       </div>
 
@@ -61,46 +61,59 @@ if (query) {
         <>
           <AnimeList animes={searchResults.data} />
           
-          {searchResults.pagination && (
-            <Pagination
-              client:only="react"
-              currentPage={searchResults.pagination.current_page}
-              lastPage={searchResults.pagination.last_visible_page}
-              hasNextPage={searchResults.pagination.has_next_page}
-              baseUrl={Astro.url.pathname}
-            />
-          )}
+          <div class="mt-12 flex justify-center">
+            {searchResults.pagination && (
+              <Pagination
+                client:only="react"
+                currentPage={searchResults.pagination.current_page}
+                lastPage={searchResults.pagination.last_visible_page}
+                hasNextPage={searchResults.pagination.has_next_page}
+                baseUrl={Astro.url.pathname}
+              />
+            )}
+          </div>
         </>
       ) : (
-        <div class="text-center py-16">
-          <div class="text-6xl mb-4">😢</div>
-          <h2 class="text-2xl font-bold mb-2">Tidak ada hasil ditemukan</h2>
-          <p class="text-gray-400">Coba gunakan kata kunci yang berbeda atau lebih umum.</p>
+        <div class="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 py-20 text-center dark:border-gray-800">
+          <div class="mb-4 text-5xl grayscale">😢</div>
+          <h2 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">Tidak ada hasil ditemukan</h2>
+          <p class="text-gray-500 dark:text-gray-400">
+            Kami tidak dapat menemukan anime dengan kata kunci tersebut.
+          </p>
         </div>
       )}
     </div>
   )}
 
   {errorMessage && (
-    <div class="bg-red-900/20 border border-red-500 rounded-lg p-6 text-center">
-      <p class="text-red-400">{errorMessage}</p>
+    <div class="rounded-lg border border-red-200 bg-red-50 p-6 text-center text-red-600 dark:border-red-900/50 dark:bg-red-900/20 dark:text-red-400">
+      <p class="font-medium">{errorMessage}</p>
     </div>
   )}
 
   {!query && (
-    <div class="text-center py-16">
-      <div class="text-6xl mb-4">🔍</div>
-      <h2 class="text-2xl font-bold mb-2">Mulai Pencarian</h2>
-      <p class="text-gray-400 mb-8">Masukkan kata kunci untuk mencari anime favorit kamu!</p>
+    <div class="py-10 text-center">
+      <div class="mb-6 flex justify-center text-gray-300 dark:text-gray-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </div>
       
-      <!-- Popular Searches -->
-      <div class="max-w-2xl mx-auto">
-        <p class="text-sm text-gray-500 mb-4">Pencarian Populer:</p>
-        <div class="flex flex-wrap gap-3 justify-center">
+      <h2 class="mb-3 text-2xl font-bold text-gray-900 dark:text-white">Mulai Pencarian</h2>
+      <p class="mb-10 text-gray-500 dark:text-gray-400">
+        Ketik judul anime, karakter, atau genre yang ingin kamu cari.
+      </p>
+      
+      <div class="mx-auto max-w-2xl">
+        <p class="mb-4 text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+          Pencarian Populer
+        </p>
+        <div class="flex flex-wrap justify-center gap-2">
           {['Naruto', 'One Piece', 'Attack on Titan', 'Demon Slayer', 'My Hero Academia', 'Jujutsu Kaisen'].map((term) => (
             <a 
               href={`/search?q=${encodeURIComponent(term)}`}
-              class="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-full text-sm transition-colors"
+              class="rounded-full bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-blue-100 hover:text-blue-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-blue-400"
             >
               {term}
             </a>
